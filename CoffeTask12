@@ -1,0 +1,113 @@
+class MenuItem {
+
+  private String name;
+  private String type;
+  private double price;
+
+  public MenuItem(String name, String type, double price) {
+    this.name = name;
+    this.type = type;
+    this.price = price;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  public double getPrice() {
+    return price;
+  }
+
+  public void setPrice(double price) {
+    this.price = price;
+  }
+}
+
+class CoffeeShop {
+  private String name;
+  private MenuItem[] menu;
+  private ArrayList<String> orders; // orders is an ArrayList of strings
+
+  public CoffeeShop(String name, MenuItem[] menu) {
+    this.name = name;
+    this.menu = menu;
+    this.orders = new ArrayList<String>(); // initialize orders as an empty ArrayList
+  }
+
+  public String addOrder(String item_name) {
+    for (MenuItem item : menu) {
+      if (item.getName().equals(item_name)) {
+        orders.add(item_name);
+        return "Order added!";
+      }
+    }
+    return "This item is currently unavailable!";
+  }
+
+  public String fulfillOrder() {
+    if (!orders.isEmpty()) {
+      String item_name = orders.remove(0);
+      return "The " + item_name + " is ready!";
+    }
+    return "All orders have been fulfilled!";
+  }
+
+  public ArrayList<String> listOrders() {
+    return orders;
+  }
+
+  public double dueAmount() {
+    double total = 0;
+    for (String order : orders) {
+      for (MenuItem item : menu) {
+        if (order.equals(item.getName())) {
+          total += item.getPrice();
+          break; // Break out of the inner loop
+        }
+      }
+    }
+    return total;
+  }
+
+  public String cheapestItem() {
+    String cheapest_item = null;
+    double cheapest_price = Double.POSITIVE_INFINITY;
+    for (MenuItem item : menu) {
+      if (item.getPrice() < cheapest_price) {
+        cheapest_item = item.getName();
+        cheapest_price = item.getPrice();
+      }
+    }
+    return cheapest_item;
+  }
+
+  public ArrayList<String> filterByType(String type) {
+    ArrayList<String> filtered_items = new ArrayList<String>();
+    for (MenuItem item : menu) {
+      if (item.getType().equals(type)) {
+        filtered_items.add(item.getName());
+      }
+    }
+    return filtered_items;
+  }
+
+  public ArrayList<String> drinksOnly() {
+    return filterByType("drink");
+  }
+
+  public ArrayList<String> foodOnly() {
+    return filterByType("food");
+  }
+}
